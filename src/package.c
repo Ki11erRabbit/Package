@@ -2,16 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
+void setArgs (int argc, char *argv[], unsigned int start, char *arguments) {
+    char temp[20];
+    for (unsigned int i = start; i <= argc; i++) {
+            temp = "";
+            strcpy(temp, argv[i]);
+            arguments += temp;
+            arguments += " ";
+        }
 
-int parseCommandLine (int argc, char *argv[], char command[], char *arguments) {
+}
+
+void setOptions (int argc, char *argv[], char *option[]) {
+
+}
+
+int parseCommandLine (int argc, char *argv[], char command[], char *option[], char *arguments) {
     char temp[20];
     strcpy(temp, argv[1]);
     if (argc < 2) {
         command = "initialize";
         return 0;
     }
-    else if (strcmp("bypass", temp)) {
+    else if (strcmp("bypass", temp)) {//for directing passing arguments into the package manager
         command = temp;
+
+        //setArgs(argc, &argv, 2, &arguments);
+
         for (unsigned int i = 2; i <= argc; i++) {
             temp = "";
             strcpy(temp, argv[i]);
@@ -20,8 +37,13 @@ int parseCommandLine (int argc, char *argv[], char command[], char *arguments) {
         }
         return 0;
     }
+    else if (strcmp("use", temp)) {//for selecting the package manager to use
+
+    }
     else if (strcmp("install", temp) || strcmp("remove", temp)) || strcmp("search", temp) {
         command = temp;
+        //setArgs(argc, &argv, 2, &arguments);
+
         for (unsigned int i = 2; i <= argc; i++) {
             temp = "";
             strcpy(temp, argv[i]);
@@ -32,17 +54,6 @@ int parseCommandLine (int argc, char *argv[], char command[], char *arguments) {
     }
 
     return 1;
-    if (argc > 2) { // package - command
-        if (strcmp("-", arg[1])) {
-            strcmp(option,argv[1]);
-            //TODO: if argv[2] compared to Install, update, remove, etc then set argv[2] to command otherwise set everything else to arguments
-            //TODO: change to make command first, will make much easier
-
-            strcpy(command, argv[2]);
-            //TODO: Write loop to copy to end of line
-        }
-        else if
-    }
 }
 
 
