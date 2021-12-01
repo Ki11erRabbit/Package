@@ -15,6 +15,8 @@ Should call the coresponding
 *   Upgrade/Update
 *   Search
 *   Set (takes a package manager name to set as the default)
+*   Pass (passes arguments directly to default package manager
+*   Initialize (rewrites the config file)
 
 
 ## Secondary Importance Commands (for normal users)
@@ -24,18 +26,16 @@ Should call the coresponding
 *   Force (ignores any complaints. aka dangerous)
 
 
-### Options For Program
+### Options For Program (WIP)
 
+*   Use followed by a hyphen and the package manager of choice (`package install use-apt` or `package pass use-apt`)
 
-*   `-` then `pkmgr name` for selecting a particular package manager to do the specified actions
-    *   also you can pass normal arguments relative to each package manager (i.e. `package -pacman -Syy`)
-*   `-init` rewrites the configuration file and does whatever action action relative to the config file if there are other commands
 
 
 
 ### Format of usage
 
-`package (Options) (Command) (Package names)`
+`package (Command) (Options) (Package names/other args)`
 
 
 
@@ -44,12 +44,13 @@ Should call the coresponding
 </div>
 
 *   `package install gimp`
-*   `package -flatpak install gimp`
-*   `package -apt install gimp`
-*   `package -init install gimp`
+*   `package install -use-flatpak gimp`   
 *   `package install ~/Downloads/gimp-3.1.4.deb`
-*   `package Update`
-*   `package set -snap`
+*   `package pass -Syu`
+*   `package pass -use-apt install gimp`
+*   `package initialize`
+*   `package update`
+*   `package set snap`
 
 
 
