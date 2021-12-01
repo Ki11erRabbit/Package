@@ -1,4 +1,5 @@
 use std::io;
+use std::env;
 
 enum Commands {
     Install,
@@ -11,29 +12,52 @@ enum Commands {
     Help,
 }
 
+struct Data {
+    command: String,
+    option: String,
+    args: String,
+}
+
 fn main() {
-    let mut command = String::new();
-    let mut option = String::new();
-    let mut args = String::new();
     let args: Vec<String> = env::args().collect();
 
-    //TODO: change to use command line arguments
-    io::stdin()
-        .read_line(&mut input);
+    let input = parse_arguments(args);
+
 }
 
-fn parse_input (input: String, command: &mut String, option: &mut String, args: &mut String) {
-    let vect: Vec<&str> = input.split(' ').collect();
-    let mut foundCommand = false;
+fn parse_arguments (args: Vec<String>) -> Data {
+    let command: &String = &args[1];
+    let mut option: &String;
+    let mut arguments: String = String::from("");
+    if match_command(&command) {
 
-    for element in vect {
-        match_command(command, vect[1]);
+        for i in 2..args.len()  {
+            if match_option(&args[i]) {
+                option = &args[i];
+            }
+            else {
+                arguments.push_str(args[i].as_str());
+                arguments.push_str(" ");
+                //arguments.insert_str(arguments.len() -1, " ");
+                //arguments = *arguments.to_owned() + *args[i].as_str() ;
+            }
+        }
+        println!("{}", arguments);
     }
+    else {
+        println!("Command not found");
+    }
+    Data {
+    command: String::from("command"),
+    option: String::from("-option"),
+    args: String::from("args"),
+}
 }
 
-fn match_command (command: &mut String, input: &str) -> bool {
+fn match_command (input: &String) -> bool {
 
     if input.eq("install") {
+        println!("install");
         return true
     }
     /*match (*input) {
@@ -48,3 +72,17 @@ fn match_command (command: &mut String, input: &str) -> bool {
     }*/
     false
 }
+
+fn match_option (input: &String) -> bool {
+    if input.eq("-use") {
+        println!("-use");
+        return true
+    }
+    else {
+        return false
+    }
+}
+
+
+
+
