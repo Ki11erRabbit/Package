@@ -28,7 +28,7 @@ Should call the coresponding
 
 ### Options For Program (WIP)
 
-*   Use followed by a hyphen and the package manager of choice (`package install use-apt` or `package pass use-apt`)
+*   Use followed by a hyphen and the package manager of choice (`package install use apt` or `package pass use apt`)
 
 
 
@@ -44,10 +44,10 @@ Should call the coresponding
 </div>
 
 *   `package install gimp`
-*   `package install -use-flatpak gimp`   
+*   `package install -use flatpak gimp`   
 *   `package install ~/Downloads/gimp-3.1.4.deb`
 *   `package pass -Syu`
-*   `package pass -use-apt install gimp`
+*   `package pass -use apt install gimp`
 *   `package initialize`
 *   `package update`
 *   `package set snap`
