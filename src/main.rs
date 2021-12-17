@@ -1,3 +1,5 @@
+mod pacman;
+
 use std::env;
 use std::process::Command;
 
@@ -20,7 +22,7 @@ fn main () {
     }
     else {
         println! ("command: {} \noption: {} \narguments: {}", input.command, input.option, input.args);
-        execute_package_manager(String::from("pacman"), String::from("-S"), [String::from("telegram-desktop"), String::from("shotwell")]);
+        //execute_package_manager(String::from("pacman"), String::from("-S"), [String::from("telegram-desktop"), String::from("shotwell")]);
     }
 
 }
@@ -51,10 +53,10 @@ fn prepare (input: Data) {
 }
 
 /* TODO: move to individual package manager .rs file
-    in order for args() to work, the array size must be known at compile time. The likely fix will be to have an array that is size 50 at least
+    in order for args() to work, the array size must be known at compile time. The likely fix will be to have an array that is size 50 at least or use vectors
 
 */
-fn execute_package_manager (program_command: &String, program_args: &String, remaining_args: &[String]) {
+fn execute_package_manager (program_command: &String, program_args: &String, remaining_args: &Vec<String>) {
 
     let mut child = Command::new("program_command")
             .arg("program_args")
