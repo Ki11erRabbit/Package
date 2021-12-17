@@ -1,31 +1,56 @@
- 
-struct Data {
-    command: String,//the task for package to perform
-    option: String, //any options in "-xyz" format
-    args: String,   //all remaining arguments
-}
+use std::env;
+use std::process::Command;
+use std::process::Child;
 
-pub fn hand_off (input: Data) {
 
-}
+pub fn hand_off (command: String, option: String, args: Vec<String>) {
 
-fn install () {
+
 
 }
 
-fn remove () {
+fn install (args: Vec<String>) {
+    let mut child = Command::new()
+            .arg()
+            .args(args)
+            .spawn().unwrap();
 
+    let result = child.wait().unwrap();
 }
 
-fn upgrade () {
+fn remove (args: Vec<String>) {
+    let mut child = Command::new()
+            .arg()
+            .args(args)
+            .spawn().unwrap();
 
+    let result = child.wait().unwrap();
 }
 
-fn search () {
+fn upgrade (args: Vec<String>) {
+    let mut child = Command::new()
+            .arg()
+            .args(args)
+            .spawn().unwrap();
 
+    let result = child.wait().unwrap();
 }
 
-fn pass () {
+fn search (args: Vec<String>) {
+    let mut child = Command::new()
+            .arg()
+            .args(args)
+            .spawn().unwrap();
 
+    let result = child.wait().unwrap();
+}
+
+fn pass (option: String, args: Vec<String>) {
+    let mut child = Command::new()
+            .arg(option)
+            .args(args)
+            .spawn().unwrap();
+
+    let result = child.wait().unwrap();
 }
 
