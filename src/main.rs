@@ -21,7 +21,7 @@ fn main () {
         //TODO: call function that executes the various package managers possible
     }
     else {
-        println! ("command: {} \noption: {} \narguments: {}", input.command, input.option, input.args);
+        println! ("command: {} \noption: {}", input.command, input.option);
         //execute_package_manager(String::from("pacman"), String::from("-S"), [String::from("telegram-desktop"), String::from("shotwell")]);
     }
 
@@ -80,7 +80,7 @@ fn execute_package_manager (program_command: &String, program_args: &String, rem
 struct Data {
     command: String,//the task for package to perform
     option: String, //any options in "-xyz" format
-    args: String,   //all remaining arguments
+    args: Vec<String>,   //all remaining arguments //TODO change to vector
 }
 
 /*
@@ -97,7 +97,7 @@ struct Data {
 fn parse_arguments (args: Vec<String>) -> Data {
     let command: &String = &args[1];
     let mut option: String = String::from("");
-    let mut arguments: String = String::from("");
+    let mut arguments = Vec::new();
 
     if match_command(&command) {
 
@@ -106,8 +106,7 @@ fn parse_arguments (args: Vec<String>) -> Data {
                 option.push_str(args[i].as_str());
             }
             else {
-                arguments.push_str(args[i].as_str());
-                arguments.push_str(" ");
+                arguments.push(String::from(args[i].as_str()));
             }
         }
         Data {
@@ -121,7 +120,7 @@ fn parse_arguments (args: Vec<String>) -> Data {
         Data {
             command: command.to_string(),
             option: String::from("ERROR"),
-            args: String::from("ERROR"),
+            args: vec![String::from("ERROR")],
         }
     }
 }

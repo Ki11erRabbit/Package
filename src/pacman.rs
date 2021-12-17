@@ -2,38 +2,40 @@ use std::env;
 use std::process::Command;
 use std::process::Child;
 
-struct Data {
+/*struct Data {
     command: String,//the task for package to perform
     option: String, //any options in "-xyz" format
-    args: vec<String>,   //all remaining arguments
+    args: Vec<String>,   //all remaining arguments
+}*/
+
+pub fn hand_off (command: String, option: String, args: Vec<String>) {
+
+
+
 }
 
-pub fn hand_off (input: Data) {
-
-}
-
-fn install () {
+fn install (args: Vec<String>) {
     let mut child = Command::new("pacman")
             .arg("-S")
-            .args(["telegram-desktop", "shotwell"])
+            .args(args)
             .spawn().unwrap();
 
     let result = child.wait().unwrap();
 }
 
-fn remove () {
+fn remove (args: Vec<String>) {
 
 }
 
-fn upgrade () {
+fn upgrade (args: Vec<String>) {
 
 }
 
-fn search () {
+fn search (args: Vec<String>) {
 
 }
 
-fn pass () {
+fn pass (args: Vec<String>) {
 
 }
 
