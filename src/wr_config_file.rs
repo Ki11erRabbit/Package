@@ -4,6 +4,7 @@ use serde::Serialize;
 use std::fs;
 use std::io;
 use std::fs::File;
+use std::fs::OpenOptions;
 
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -37,6 +38,7 @@ struct oConfig {
 }*/
 
 pub fn check_config () {
+
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
 
         let config_dir = proj_dirs.config_dir();
@@ -48,8 +50,16 @@ pub fn check_config () {
             Err(_) => create_config(),
         };
 
-        //let mut config_file = toml::to_string(&config).unwrap();
-        //fs::write(config_dir, config_file).expect("Could not write to file!");
+
+
+        let config_file_location = fs::read_to_string(config_dir.join("config.toml"),);
+
+        let mut config_file = toml::to_string(&config).unwrap();
+        fs::create_dir_all(config_dir);
+        File::create(config_file_location.unwrap());
+
+        let config_file_location = fs::read_to_string(config_dir.join("config.toml"),);
+        fs::write(config_file_location.unwrap(), config_file).expect("Could not write to file!");
 
         dbg!(config);
         //dbg!(config_file_location);
