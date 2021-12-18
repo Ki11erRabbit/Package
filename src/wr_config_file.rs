@@ -9,11 +9,11 @@ struct Config {
     pacman: bool,
     apt: bool,
     dnf: bool,
-    zypper: bool,
     portage: bool,
+    zypper: bool,
+    snap: bool,
     flatpak: bool,
     aur: bool,
-    snap: bool,
     npm: bool,
     pip: bool,
 }
@@ -42,32 +42,35 @@ pub fn check_config () {
 }
 
 fn create_config() -> Config {//TODO: Make it automatic rather than requiring user input
-    println!("TODO: allow user to create config file");
     println!("What is the primary package manager that you use?");
-    let mut main_pkgmgr = String::new();
+    let mut main_pkg_mgr = String::new();
     io::stdin()
-            .read_line(&mut main_pkgmgr)
+            .read_line(&mut main_pkg_mgr)
             .expect("Failed to read line");
+    main_pkg_mgr.pop();
 
-    let mut secondary_pkgmgr = Vec::new();
+    let mut secondary_pkg_mgr = Vec::new();
     match yes_no_prompt() {
-        false => println!("Writing Config File"),
+        false => println!("Writing Config File..."),
         true => loop {
                 println!("What is another package manager that you use?\n (i.e. pacman, apt, portage, npm)");
-                let mut pkgmgr = String::new();
+                let mut pkg_mgr = String::new();
                 io::stdin()
-                    .read_line(&mut pkgmgr)
+                    .read_line(&mut pkg_mgr)
                     .expect("Failed to read line");
-                secondary_pkgmgr.push(String::from(pkgmgr.as_str()));
+                pkg_mgr.pop();
+                secondary_pkg_mgr.push(String::from(pkg_mgr.as_str()));
                 match yes_no_prompt() {
                     false => {
-                        println!("Writing Config File");
+                        println!("Writing Config File...");
                         break;
                         },
                     true => continue,
                 };
             },
     };
+
+    set_config(main_pkg_mgr, secondary_pkg_mgr)
 
 
 
@@ -76,19 +79,7 @@ fn create_config() -> Config {//TODO: Make it automatic rather than requiring us
             Err(_) => continue,
         };*/
 
-    Config {
-        current: String::from("ERROR"),
-        pacman: false,
-        apt: false,
-        dnf: false,
-        zypper: false,
-        portage: false,
-        flatpak: false,
-        aur: false,
-        snap: false,
-        npm: false,
-        pip: false,
-    }
+
 }
 
 fn yes_no_prompt () -> bool {//TODO: come up with a better name
@@ -104,6 +95,7 @@ fn yes_no_prompt () -> bool {//TODO: come up with a better name
             Err(_) => 'n',
         };
 
+
     if yn_prompt.eq(&'y') {
         true
     }
@@ -115,6 +107,95 @@ fn yes_no_prompt () -> bool {//TODO: come up with a better name
         false
     }
 
+}
+
+fn set_config (main_pkg_mgr: String, pkg_mgr: Vec<String>) ->Config {
+    let mut config = Config {
+        current: main_pkg_mgr,
+        pacman: false,
+        apt: false,
+        dnf: false,
+        portage: false,
+        zypper: false,
+        snap: false,
+        flatpak: false,
+        aur: false,
+        npm: false,
+        pip: false,
+    };
+    for element in pkg_mgr {
+
+        if element.eq("pacman") {
+            config.pacman = true;
+        }
+        else if element.eq("apt") {
+            config.apt = true;
+        }
+        else if element.eq("dnf") {
+            config.dnf = true;
+        }
+        else if element.eq("portage") {
+            config.portage = true;
+        }
+        else if element.eq("zypper") {
+            config.zypper = true;
+        }
+        else if element.eq("snap") {
+            config.snap = true;
+        }
+        else if element.eq("flatpak") {
+            config.flatpak = true;
+        }
+        else if element.eq("aur") {
+            config.aur = true;
+        }
+        else if element.eq("npm") {
+            config.npm = true;
+        }
+        else if element.eq("pip") {
+            config.pip = true;
+        }
+        else {
+            println!("invalid package manager {}", element);
+        }
+    }
+    config
+}
+
+fn check_input (pkg_mgr: &String) -> bool {
+    if pkg_mgr.eq("pacman") {
+        true
+    }
+    else if pkg_mgr.eq("apt") {
+        true
+    }
+    else if pkg_mgr.eq("dnf") {
+        true
+    }
+    else if pkg_mgr.eq("portage") {
+        true
+    }
+    else if pkg_mgr.eq("zypper") {
+        true
+    }
+    else if pkg_mgr.eq("snap") {
+        true
+    }
+    else if pkg_mgr.eq("flatpak") {
+        true
+    }
+    else if pkg_mgr.eq("aur") {
+        true
+    }
+    else if pkg_mgr.eq("npm") {
+        true
+    }
+    else if pkg_mgr.eq("pip") {
+        true
+    }
+    else {
+        false
+    }
 }
 
 pub fn read_config () {
