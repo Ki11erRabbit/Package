@@ -1,6 +1,7 @@
 use directories::ProjectDirs;
 use serde::Deserialize;
 use std::fs;
+use std::io;
 
 #[derive(Deserialize, Debug)]
 struct Config {
@@ -43,7 +44,37 @@ pub fn check_config () {
 fn create_config() -> Config {//TODO: Make it automatic rather than requiring user input
     println!("TODO: allow user to create config file");
     println!("What is the primary package manager that you use?");
+    let mut main_pkgmgr = String::new();
+    io::stdin()
+            .read_line(&mut main_pkgmgr)
+            .expect("Failed to read line");
 
+    let mut secondary_pkgmgr = Vec::new();
+    match yes_no_prompt() {
+        false => println!("Writing Config File"),
+        true => loop {
+                println!("What is another package manager that you use?\n (i.e. pacman, apt, portage, npm)");
+                let mut pkgmgr = String::new();
+                io::stdin()
+                    .read_line(&mut pkgmgr)
+                    .expect("Failed to read line");
+                secondary_pkgmgr.push(String::from(pkgmgr.as_str()));
+                match yes_no_prompt() {
+                    false => {
+                        println!("Writing Config File");
+                        break;
+                        },
+                    true => continue,
+                };
+            },
+    };
+
+
+
+    /*let yn_prompt: char = match guess.trim().parse() {
+            Ok(char) => char,
+            Err(_) => continue,
+        };*/
 
     Config {
         current: String::from("ERROR"),
@@ -58,6 +89,32 @@ fn create_config() -> Config {//TODO: Make it automatic rather than requiring us
         npm: false,
         pip: false,
     }
+}
+
+fn yes_no_prompt () -> bool {//TODO: come up with a better name
+    println!("OK! Do you have any other package mangagers you wish to use? y/n");
+
+    let mut yn_prompt = String::new();
+    io::stdin()
+            .read_line(&mut yn_prompt)
+            .expect("Failed to read line");
+
+    let yn_prompt: char = match yn_prompt.trim().parse() {
+            Ok(char) => char,
+            Err(_) => 'n',
+        };
+
+    if yn_prompt.eq(&'y') {
+        true
+    }
+    else if yn_prompt.eq(&'n') {
+        false
+    }
+    else {
+        println!("Invalid response");
+        false
+    }
+
 }
 
 pub fn read_config () {
