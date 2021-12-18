@@ -1,0 +1,19 @@
+[current]
+use = "pacman"
+
+[available]
+pacman = true
+apt = false
+dnf = false
+zypper = false
+portage = false
+flatpak = false
+aur = false
+snap = false
+npm = false
+pip = false
+
+[aur_helper]
+aura = false
+yay = false
+paru = false

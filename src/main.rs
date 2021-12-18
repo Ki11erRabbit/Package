@@ -1,7 +1,10 @@
 mod pacman;
+mod wr_config_file;
 
 use std::env;
 use std::process::Command;
+
+
 
 /*
  *  MAIN
@@ -12,9 +15,13 @@ use std::process::Command;
 */
 
 fn main () {
+    wr_config_file::check_config();
+
     let args: Vec<String> = env::args().collect();
 
     let input = parse_arguments(args);
+
+
 
     if input.option.as_str() == "ERROR" {
         println!("Invalid command -- \'{}\'", input.command);
@@ -25,21 +32,6 @@ fn main () {
         //execute_package_manager(String::from("pacman"), String::from("-S"), [String::from("telegram-desktop"), String::from("shotwell")]);
     }
 
-}
-
-enum Main_Package_Managers {
-    Pacman,
-    Apt,
-    Rpm,
-    Portage,
-    Zypper,
-    Nix,
-}
-
-enum Secondary_Package_Managers {
-    Aur,
-    Flatpak,
-    Snap,
 }
 
 
