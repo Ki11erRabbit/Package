@@ -1,9 +1,12 @@
 use directories::ProjectDirs;
 use serde::Deserialize;
+use serde::Serialize;
 use std::fs;
 use std::io;
+use std::fs::File;
 
-#[derive(Deserialize, Debug)]
+
+#[derive(Deserialize, Serialize, Debug)]
 struct Config {
     current: String,
     pacman: bool,
@@ -18,20 +21,38 @@ struct Config {
     pip: bool,
 }
 
+/*#[derive(Serialize)]
+struct oConfig {
+    current: String,
+    pacman: bool,
+    apt: bool,
+    dnf: bool,
+    portage: bool,
+    zypper: bool,
+    snap: bool,
+    flatpak: bool,
+    aur: bool,
+    npm: bool,
+    pip: bool,
+}*/
+
 pub fn check_config () {
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
 
         let config_dir = proj_dirs.config_dir();
 
-        let config_file = fs::read_to_string(config_dir.join("config.toml"),);
+        let config_file_location = fs::read_to_string(config_dir.join("config.toml"),);
 
-        let config: Config = match config_file {
+        let config: Config = match config_file_location {
             Ok(file) => toml::from_str(&file).unwrap(),
             Err(_) => create_config(),
         };
 
-        dbg!(config);
+        //let mut config_file = toml::to_string(&config).unwrap();
+        //fs::write(config_dir, config_file).expect("Could not write to file!");
 
+        dbg!(config);
+        //dbg!(config_file_location);
         dbg!(config_dir);
         // Linux:   /home/alice/.config/barapp
         // Windows: C:\Users\Alice\AppData\Roaming\Foo Corp\Bar App
@@ -40,6 +61,8 @@ pub fn check_config () {
 
 
 }
+
+
 
 fn create_config() -> Config {//TODO: Make it automatic rather than requiring user input
     println!("What is the primary package manager that you use?");
@@ -108,6 +131,7 @@ fn yes_no_prompt () -> bool {//TODO: come up with a better name
     }
 
 }
+
 
 fn set_config (main_pkg_mgr: String, pkg_mgr: Vec<String>) ->Config {
     let mut config = Config {
