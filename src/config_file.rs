@@ -7,7 +7,6 @@ use std::fs::File;
 use std::fs::OpenOptions;
 use io::Write;
 
-
 #[derive(Deserialize, Serialize, Debug)]
 struct Config {
     current: String,
@@ -64,6 +63,32 @@ pub fn check_available (pkg_mgr: String) -> bool {
     output
 }
 
+pub fn reinitialize_config () {
+    println!("Recreating configuration file");
+
+    if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
+
+        let config_dir = proj_dirs.config_dir();
+        let config_file_location = config_dir.join("config.toml");
+
+        let config_file = fs::read_to_string(config_dir.join("config.toml"),);
+
+        //TODO: add in capability to delete config file for recreation
+        let mut file = File::open(config_file_location)
+            .expect("Could not open file!");
+        let user_config: Config = create_config();//TODO: make it so that the file is cleared first
+        let toml = toml::to_string(&user_config).unwrap();
+
+        file.write_all(&toml.into_bytes())
+            .expect("Cannot write to the file :(");
+
+        dbg!(config_dir);
+        // Linux:   /home/alice/.config/barapp
+        // Windows: C:\Users\Alice\AppData\Roaming\Foo Corp\Bar App
+        // macOS:   /Users/Alice/Library/Application Support/com.Foo-Corp.Bar-App
+    }
+
+}
 
 pub fn check_config () {
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
@@ -97,8 +122,6 @@ pub fn check_config () {
 
 
 }
-
-
 
 fn create_config() -> Config {//TODO: Make it automatic rather than requiring user input
     println!("What is the primary package manager that you use?");

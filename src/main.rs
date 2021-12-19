@@ -1,5 +1,5 @@
 mod pacman;
-mod wr_config_file;
+mod config_file;
 
 use std::env;
 use std::process::Command;
@@ -15,7 +15,7 @@ use std::process::Command;
 */
 
 fn main () {
-    wr_config_file::check_config();
+    config_file::check_config();
 
     let args: Vec<String> = env::args().collect();
 
@@ -34,7 +34,9 @@ fn main () {
 
 }
 
-
+fn execute_command (input: Data) {
+    let current_pkg_mgr =
+}
 
 
 fn prepare (input: Data) {
