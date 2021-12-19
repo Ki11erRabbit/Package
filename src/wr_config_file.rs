@@ -36,41 +36,24 @@ pub fn check_config () {
 
         let config_file = fs::read_to_string(config_dir.join("config.toml"),);
 
-        config = create_config();
-        let config: Config = match config_file_location {
+
+        let config: Config = match config_file {
             Ok(file) => toml::from_str(&file).unwrap(),
             Err(_) => {
                     fs::create_dir_all(config_dir);
-                    create_config()
+                    let mut file = File::create(config_file_location)
+                        .expect("Could not create file!");
+                    let user_config: Config = create_config();
+                    let toml = toml::to_string(&user_config).unwrap();
+
+                    file.write_all(&toml.into_bytes())
+                        .expect("Cannot write to the file :(");
+                    user_config
                 },
         };
 
-        /*let mut file = OpenOptions::new().create_new(true)
-                                        .write(true)
-                                        .open(config_file_location);*/
-
-        /*let toml: String = toml::to_string(&config);
-        writeln!(file, "{}", toml);*/
-
-
-        //dbg!(config_file_location);
-        /*let mut file = OpenOptions::new().write(true)
-                                     .create_new(true)
-                                     .open(config_file_location.to_str())
-                                     .unwrap();*/
-
-        //dbg!(file);
-
-
-        //let mut config_file = toml::to_string(&config).unwrap();
-        //fs::create_dir_all(config_dir);
-        //File::create(config_file_location.unwrap());
-
-
-        //fs::write(config_file_location, config_file).expect("Could not write to file!");
 
         dbg!(config);
-        //dbg!(config_file_location);
         dbg!(config_dir);
         // Linux:   /home/alice/.config/barapp
         // Windows: C:\Users\Alice\AppData\Roaming\Foo Corp\Bar App
