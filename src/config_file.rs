@@ -4,7 +4,6 @@ use serde::Serialize;
 use std::fs;
 use std::io;
 use std::fs::File;
-use std::fs::OpenOptions;
 use io::Write;
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -28,7 +27,7 @@ pub fn get_current () -> String {
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
 
         let config_dir = proj_dirs.config_dir();
-        let config_file_location = config_dir.join("config.toml");
+        let config_file_location = config_dir.join("config.toml");//TODO: Check if it can be removed
 
         let config_file = fs::read_to_string(config_dir.join("config.toml"),);
 
@@ -40,13 +39,13 @@ pub fn get_current () -> String {
     output
 }
 
-pub fn check_available (pkg_mgr: String) -> bool {
+pub fn check_available (pkg_mgr: String) -> bool {//TODO: Figure out why this string isn't being used/ see if it can use check_input()
     let mut output: bool = false;
 
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
 
         let config_dir = proj_dirs.config_dir();
-        let config_file_location = config_dir.join("config.toml");
+        let config_file_location = config_dir.join("config.toml");//TODO: Check if it can be removed
 
         let config_file = fs::read_to_string(config_dir.join("config.toml"),);
 
@@ -71,7 +70,7 @@ pub fn reinitialize_config () {
         let config_dir = proj_dirs.config_dir();
         let config_file_location = config_dir.join("config.toml");
 
-        let config_file = fs::read_to_string(config_dir.join("config.toml"),);
+        let config_file = fs::read_to_string(config_dir.join("config.toml"),);//TODO: Check if it can be removed
 
         //TODO: add in capability to delete config file for recreation
         let mut file = File::open(config_file_location)
@@ -100,10 +99,10 @@ pub fn check_config () {
 
 
         match config_file {//TODO: make fix this so that if the user ctr + c during setup it doesn't ever rewrite config file.
-            Ok(file) => {},
+            Ok(file) => {},//TODO: Check if it can be removed
             Err(_) => {
                     println!("Unable to find configuration file. Begining config file creation.");
-                    fs::create_dir_all(config_dir);
+                    fs::create_dir_all(config_dir);//TODO: add in error handling
                     let mut file = File::create(config_file_location)
                         .expect("Could not create file!");
                     let user_config: Config = create_config();
@@ -277,17 +276,5 @@ fn check_input (pkg_mgr: &String) -> bool {
     }
     else {
         false
-    }
-}
-
-pub fn read_config () {
-
-    if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
-        let config_dir = proj_dirs.config_dir();
-
-        dbg!(config_dir);
-        // Linux:   /home/alice/.config/barapp
-        // Windows: C:\Users\Alice\AppData\Roaming\Foo Corp\Bar App
-        // macOS:   /Users/Alice/Library/Application Support/com.Foo-Corp.Bar-App
     }
 }

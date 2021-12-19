@@ -2,7 +2,6 @@ mod pacman;
 mod config_file;
 
 use std::env;
-use std::process::Command;
 
 
 
@@ -25,17 +24,15 @@ fn main () {
 
     if input.option.as_str() == "ERROR" {
         println!("Invalid command -- \'{}\'", input.command);
-        //TODO: call function that executes the various package managers possible
     }
     else {
-        println! ("command: {} \noption: {}", input.command, input.option);
-        //execute_package_manager(String::from("pacman"), String::from("-S"), [String::from("telegram-desktop"), String::from("shotwell")]);
+        execute_command(input);
     }
 
 }
 
 fn execute_command (input: Data) {
-    let selected_pkg_mgr: String;
+    let mut selected_pkg_mgr = config_file::get_current();
     if input.command.eq("initialize") {
         config_file::reinitialize_config();
     }
@@ -49,7 +46,7 @@ fn execute_command (input: Data) {
         selected_pkg_mgr = config_file::get_current();
     }
 
-
+    prehand_off(input, selected_pkg_mgr);
 }
 
 fn prehand_off (input: Data, current_pkg_mgr: String) {
@@ -87,35 +84,6 @@ fn prehand_off (input: Data, current_pkg_mgr: String) {
         println!("Invalid package manager {}", current_pkg_mgr)
     }
 }
-
-
-fn prepare (input: Data) {
-    //TODO: write a function that reads a configuration file and selects default package manager which then feeds the input to the various package manager .rs files
-
-    //if input.command.eq("update")
-
-}
-
-/* TODO: move to individual package manager .rs file
-    in order for args() to work, the array size must be known at compile time. The likely fix will be to have an array that is size 50 at least or use vectors
-
-*/
-fn execute_package_manager (program_command: &String, program_args: &String, remaining_args: &Vec<String>) {
-
-    let mut child = Command::new("program_command")
-            .arg("program_args")
-            .args(remaining_args)
-            .spawn().unwrap();
-
-    let result = child.wait().unwrap();
-
-    /*Command::new(program_command)
-        .arg(program_args)
-        .arg(remaing_args)
-        .spawn();*/
-}
-
-
 
 /*
  *  Input Interpretation

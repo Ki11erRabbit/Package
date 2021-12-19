@@ -1,7 +1,4 @@
-use std::env;
 use std::process::Command;
-use std::process::Child;
-
 
 pub fn hand_off (command: String, args: Vec<String>) {
 
@@ -32,7 +29,7 @@ fn install (args: Vec<String>) {
             .args(args)
             .spawn().unwrap();
 
-    let result = child.wait().unwrap();
+    let _result = child.wait().unwrap();
 }
 
 fn remove (args: Vec<String>) {
@@ -41,7 +38,7 @@ fn remove (args: Vec<String>) {
             .args(args)
             .spawn().unwrap();
 
-    let result = child.wait().unwrap();
+    let _result = child.wait().unwrap();
 }
 
 fn upgrade (args: Vec<String>) {
@@ -50,7 +47,7 @@ fn upgrade (args: Vec<String>) {
             .args(args)
             .spawn().unwrap();
 
-    let result = child.wait().unwrap();
+    let _result = child.wait().unwrap();
 }
 
 fn search (args: Vec<String>) {
@@ -59,7 +56,7 @@ fn search (args: Vec<String>) {
             .args(args)
             .spawn().unwrap();
 
-    let result = child.wait().unwrap();
+    let _result = child.wait().unwrap();
 }
 
 fn pass (args: Vec<String>) {
@@ -67,6 +64,5 @@ fn pass (args: Vec<String>) {
             .args(args)
             .spawn().unwrap();
 
-    let result = child.wait().unwrap();
+    let _result = child.wait().unwrap();
 }
-
