@@ -21,7 +21,7 @@ struct Config {
     npm: bool,
     pip: bool,
 }
-
+//TODO: add function that can change the current/default package manager
 pub fn get_current () -> String {
     let mut output = String::new();
 

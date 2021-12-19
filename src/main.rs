@@ -35,7 +35,57 @@ fn main () {
 }
 
 fn execute_command (input: Data) {
-    let current_pkg_mgr =
+    let selected_pkg_mgr: String;
+    if input.command.eq("initialize") {
+        config_file::reinitialize_config();
+    }
+    else if match_option(&input.option) {
+        if config_file::check_available(String::from(input.args[0].as_str())) {
+            println!("TODO: add in ability to launch into particular package manager.");
+            selected_pkg_mgr = String::from(input.args[0].as_str());
+        }
+    }
+    else {
+        selected_pkg_mgr = config_file::get_current();
+    }
+
+
+}
+
+fn prehand_off (input: Data, current_pkg_mgr: String) {
+    if current_pkg_mgr.eq("pacman") {
+        pacman::hand_off(input.command, input.args);
+    }
+    else if current_pkg_mgr.eq("apt") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("dnf") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("portage") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("zypper") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("snap") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("flatpak") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("aur") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("npm") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else if current_pkg_mgr.eq("pip") {
+        println!("Package Manager {} not yet implemented.", current_pkg_mgr);
+    }
+    else {
+        println!("Invalid package manager {}", current_pkg_mgr)
+    }
 }
 
 

@@ -3,7 +3,7 @@ use std::process::Command;
 use std::process::Child;
 
 
-pub fn hand_off (command: String, option: String, args: Vec<String>) {
+pub fn hand_off (command: String, args: Vec<String>) {
 
     if command.eq("install") {
         install(args);
@@ -18,7 +18,7 @@ pub fn hand_off (command: String, option: String, args: Vec<String>) {
         search(args);
     }
     else if command.eq("pass") {
-        pass(option, args);
+        pass(args);
     }
     else {
         println!("Invalid Command");
@@ -62,9 +62,8 @@ fn search (args: Vec<String>) {
     let result = child.wait().unwrap();
 }
 
-fn pass (option: String, args: Vec<String>) {
+fn pass (args: Vec<String>) {
     let mut child = Command::new("pacman")
-            .arg(option)
             .args(args)
             .spawn().unwrap();
 
