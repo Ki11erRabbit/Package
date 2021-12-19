@@ -5,6 +5,11 @@ use std::fs;
 use std::io;
 use std::fs::File;
 use std::fs::OpenOptions;
+use io::Write;
+
+use std::env;
+use std::process::Command;
+use std::process::Child;
 
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -22,44 +27,47 @@ struct Config {
     pip: bool,
 }
 
-/*#[derive(Serialize)]
-struct oConfig {
-    current: String,
-    pacman: bool,
-    apt: bool,
-    dnf: bool,
-    portage: bool,
-    zypper: bool,
-    snap: bool,
-    flatpak: bool,
-    aur: bool,
-    npm: bool,
-    pip: bool,
-}*/
 
 pub fn check_config () {
-
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
 
         let config_dir = proj_dirs.config_dir();
+        let config_file_location = config_dir.join("config.toml");
 
-        let config_file_location = fs::read_to_string(config_dir.join("config.toml"),);
+        let config_file = fs::read_to_string(config_dir.join("config.toml"),);
 
+        config = create_config();
         let config: Config = match config_file_location {
             Ok(file) => toml::from_str(&file).unwrap(),
-            Err(_) => create_config(),
+            Err(_) => {
+                    fs::create_dir_all(config_dir);
+                    create_config()
+                },
         };
 
+        /*let mut file = OpenOptions::new().create_new(true)
+                                        .write(true)
+                                        .open(config_file_location);*/
+
+        /*let toml: String = toml::to_string(&config);
+        writeln!(file, "{}", toml);*/
 
 
-        let config_file_location = fs::read_to_string(config_dir.join("config.toml"),);
+        //dbg!(config_file_location);
+        /*let mut file = OpenOptions::new().write(true)
+                                     .create_new(true)
+                                     .open(config_file_location.to_str())
+                                     .unwrap();*/
 
-        let mut config_file = toml::to_string(&config).unwrap();
-        fs::create_dir_all(config_dir);
-        File::create(config_file_location.unwrap());
+        //dbg!(file);
 
-        let config_file_location = fs::read_to_string(config_dir.join("config.toml"),);
-        fs::write(config_file_location.unwrap(), config_file).expect("Could not write to file!");
+
+        //let mut config_file = toml::to_string(&config).unwrap();
+        //fs::create_dir_all(config_dir);
+        //File::create(config_file_location.unwrap());
+
+
+        //fs::write(config_file_location, config_file).expect("Could not write to file!");
 
         dbg!(config);
         //dbg!(config_file_location);
@@ -141,7 +149,6 @@ fn yes_no_prompt () -> bool {//TODO: come up with a better name
     }
 
 }
-
 
 fn set_config (main_pkg_mgr: String, pkg_mgr: Vec<String>) ->Config {
     let mut config = Config {
