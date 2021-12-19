@@ -7,10 +7,6 @@ use std::fs::File;
 use std::fs::OpenOptions;
 use io::Write;
 
-use std::env;
-use std::process::Command;
-use std::process::Child;
-
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Config {
@@ -27,6 +23,47 @@ struct Config {
     pip: bool,
 }
 
+pub fn get_current () -> String {
+    let mut output = String::new();
+
+    if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
+
+        let config_dir = proj_dirs.config_dir();
+        let config_file_location = config_dir.join("config.toml");
+
+        let config_file = fs::read_to_string(config_dir.join("config.toml"),);
+
+        let config: Config = toml::from_str(&config_file.unwrap()).unwrap();
+
+        output = config.current;
+        //dbg!(config.current);
+    }
+    output
+}
+
+pub fn check_available (pkg_mgr: String) -> bool {
+    let mut output: bool = false;
+
+    if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
+
+        let config_dir = proj_dirs.config_dir();
+        let config_file_location = config_dir.join("config.toml");
+
+        let config_file = fs::read_to_string(config_dir.join("config.toml"),);
+
+        let config: Config = toml::from_str(&config_file.unwrap()).unwrap();
+
+        if config.pacman || config.apt || config.dnf || config.portage || config.zypper ||
+           config.zypper || config.flatpak || config.aur || config.npm {
+            output = true;
+        }
+        else {
+            output = false;
+        }
+    }
+    output
+}
+
 
 pub fn check_config () {
     if let Some(proj_dirs) = ProjectDirs::from("dev", "Ki11erRabbit",  "package") {
@@ -37,9 +74,10 @@ pub fn check_config () {
         let config_file = fs::read_to_string(config_dir.join("config.toml"),);
 
 
-        let config: Config = match config_file {
-            Ok(file) => toml::from_str(&file).unwrap(),
+        match config_file {//TODO: make fix this so that if the user ctr + c during setup it doesn't ever rewrite config file.
+            Ok(file) => {},
             Err(_) => {
+                    println!("Unable to find configuration file. Begining config file creation.");
                     fs::create_dir_all(config_dir);
                     let mut file = File::create(config_file_location)
                         .expect("Could not create file!");
@@ -48,12 +86,9 @@ pub fn check_config () {
 
                     file.write_all(&toml.into_bytes())
                         .expect("Cannot write to the file :(");
-                    user_config
                 },
         };
 
-
-        dbg!(config);
         dbg!(config_dir);
         // Linux:   /home/alice/.config/barapp
         // Windows: C:\Users\Alice\AppData\Roaming\Foo Corp\Bar App
